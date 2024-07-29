@@ -11,11 +11,20 @@ public class Config {
 
 
     public static final ForgeConfigSpec.ConfigValue<String> VERSION_API_ENDPOINT = BUILDER
-            .comment("the endpoint supplying the newest version number\n(Read the documentation at https://github.com/DevLung/CreateSMPUpdateChecker for more information.)\nFormat: https://example.com/")
+            .comment("""
+                    WARNING: DO NOT TOUCH THESE VALUES IF YOU DON'T KNOW WHAT YOU ARE DOING!
+                    CHANGING THESE VALUES MAY BREAK THE UPDATE NOTIFICATION SYSTEM!
+                    
+                    the endpoint supplying the newest version number
+                    (Read the documentation at https://github.com/DevLung/CreateSMPUpdateChecker for more information.)
+                    Format: https://example.com/""")
             .define("versionApiEndpoint", "");
 
     public static final ForgeConfigSpec.ConfigValue<String> CURRENT_VERSION = BUILDER
-            .comment("the current version number of the modpack\n(this number is compared to the number of the newest version provided by the API Endpoint to determine if an update is available)")
+            .comment("""
+                    the current version number of the modpack
+                    (this number is compared to the number of the newest version provided by the API Endpoint
+                    to determine if an update is available)""")
             .define("currentVersion", "1.0.0");
 
 
