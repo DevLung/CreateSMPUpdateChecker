@@ -25,5 +25,26 @@ public class CreateSMPUpdateChecker {
 
     private void commonSetup(final FMLCommonSetupEvent event) {
         VersionChecker.checkForUpdates();
+
+        if (VersionChecker.updateAvailable) {
+            LOGGER.warn(String.format("""
+                    NEW UPDATE AVAILABLE!
+                    
+                    A NEW CREATE-SMP MODPACK VERSION IS AVAILABLE!
+                    CURRENT VERSION:    %s
+                    NEW VERSION:        %s
+                    DOWNLOAD HERE:      %s
+                    UPDATE TYPE:        %s
+                    CHANGELOG:
+                    %s
+                    A NEW CREATE-SMP MODPACK VERSION IS AVAILABLE!
+                    """,
+                    Config.currentVersion,
+                    VersionChecker.latestVersionInfo.get("latestVersion"),
+                    VersionChecker.latestVersionInfo.get("downloadUrl"),
+                    VersionChecker.latestVersionInfo.get("updateType"),
+                    VersionChecker.latestVersionInfo.get("changelog")
+            ));
+        }
     }
 }

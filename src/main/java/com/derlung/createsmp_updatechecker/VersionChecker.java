@@ -20,15 +20,13 @@ import java.util.Objects;
 public class VersionChecker {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    public static Map<String, Object> latestVersionInfo;
     public static boolean updateAvailable = false;
     private static final String latestVersionInfoFilePath = "./latest_version_info.json";
 
     public static void checkForUpdates() {
-        URL endpointUrl;
-        Map<String, Object> latestVersionInfo;
         try {
-            endpointUrl = new URL(Config.versionApiEndpoint);
-            latestVersionInfo = getJsonFromUrl(endpointUrl);
+            latestVersionInfo = getJsonFromUrl(new URL(Config.versionApiEndpoint));
 
             if (latestVersionInfo.get("latestVersion") == null) {
                 throw new JsonIOException("key \"latestVersion\" does not exist");
