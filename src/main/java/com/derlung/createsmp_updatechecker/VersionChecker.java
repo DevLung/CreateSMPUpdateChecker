@@ -21,7 +21,7 @@ public class VersionChecker {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     public static boolean updateAvailable = false;
-    private static final String latestVersionInfoFilePath = "./config/latest_version_info.json";
+    private static final String latestVersionInfoFilePath = "./latest_version_info.json";
 
     public static void checkForUpdates() {
         URL endpointUrl;
