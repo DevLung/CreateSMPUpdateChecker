@@ -33,6 +33,7 @@ public class VersionChecker {
             updateAvailable = !Objects.equals(Config.currentVersion, latestVersionInfo.get("latestVersion"));
 
             latestVersionInfo.remove("$schema");
+            latestVersionInfo.put("currentVersion", Config.currentVersion);
             latestVersionInfo.put("updateAvailable", updateAvailable);
             writeJsonToFile(GSON.toJson(latestVersionInfo), latestVersionInfoFilePath);
             return;
