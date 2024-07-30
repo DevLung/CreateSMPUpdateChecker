@@ -24,6 +24,6 @@ public class CreateSMPUpdateChecker {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        // add calls to VersionChecker here
+        VersionChecker.checkForUpdates();
     }
 }
