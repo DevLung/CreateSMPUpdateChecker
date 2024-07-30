@@ -47,7 +47,7 @@ public class VersionChecker {
         }
 
         // fallback so file is always created
-        writeJsonToFile("{\"updateAvailable\": false}", latestVersionInfoFilePath);
+        writeJsonToFile(String.format("{\"currentVersion\": \"%s\", \"updateAvailable\": false}", Config.currentVersion), latestVersionInfoFilePath);
     }
 
     private static Map<String, Object> getJsonFromUrl(URL url) throws IOException, JsonSyntaxException {
