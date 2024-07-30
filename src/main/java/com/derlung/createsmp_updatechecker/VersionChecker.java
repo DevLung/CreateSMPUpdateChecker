@@ -14,8 +14,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class VersionChecker {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -35,7 +34,8 @@ public class VersionChecker {
 
             latestVersionInfo.remove("$schema");
             latestVersionInfo.put("updateAvailable", updateAvailable);
-            writeJsonToFile(latestVersionInfo, latestVersionInfoFilePath);
+            writeJsonToFile(GSON.toJson(latestVersionInfo), latestVersionInfoFilePath);
+            return;
         }
         catch (MalformedURLException ex) {
             LOGGER.error("INVALID VERSION API ENDPOINT! Please change endpoint URL in config/createsmp_updatechecker-common.toml", ex);
@@ -44,6 +44,9 @@ public class VersionChecker {
         } catch (JsonSyntaxException | JsonIOException ex) {
             LOGGER.error("version info JSON is invalid", ex);
         }
+
+        // fallback so file is always created
+        writeJsonToFile("{\"updateAvailable\": false}", latestVersionInfoFilePath);
     }
 
     private static Map<String, Object> getJsonFromUrl(URL url) throws IOException, JsonSyntaxException {
@@ -51,9 +54,9 @@ public class VersionChecker {
         return GSON.fromJson(json, new TypeToken<Map<String, Object>>(){}.getType());
     }
 
-    private static void writeJsonToFile(Map<String, Object> jsonMap, String filePath) throws IOException {
+    private static void writeJsonToFile(String json, String filePath) {
         try (FileWriter file = new FileWriter(filePath)) {
-            file.write(GSON.toJson(jsonMap));
+            file.write(json);
         } catch (IOException ex) {
             LOGGER.error("could not write version info JSON to file", ex);
         }

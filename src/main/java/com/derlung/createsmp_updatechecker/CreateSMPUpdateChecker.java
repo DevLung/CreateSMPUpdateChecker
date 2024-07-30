@@ -24,6 +24,7 @@ public class CreateSMPUpdateChecker {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
+        LOGGER.info("checking for modpack updates...");
         VersionChecker.checkForUpdates();
 
         if (VersionChecker.updateAvailable) {
@@ -45,6 +46,8 @@ public class CreateSMPUpdateChecker {
                     VersionChecker.latestVersionInfo.get("updateType"),
                     VersionChecker.latestVersionInfo.get("changelog")
             ));
+        } else {
+            LOGGER.info("modpack version is up to date");
         }
     }
 }
