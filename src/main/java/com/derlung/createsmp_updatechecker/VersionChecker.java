@@ -1,9 +1,6 @@
 package com.derlung.createsmp_updatechecker;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.mojang.logging.LogUtils;
 import org.apache.commons.io.IOUtils;
@@ -28,7 +25,7 @@ public class VersionChecker {
             latestVersionInfo = getJsonFromUrl(new URL(Config.versionApiEndpoint));
 
             if (latestVersionInfo.get("latestVersion") == null) {
-                throw new JsonIOException("key \"latestVersion\" does not exist");
+                throw new JsonParseException("key \"latestVersion\" does not exist");
             }
             updateAvailable = !Objects.equals(Config.currentVersion, latestVersionInfo.get("latestVersion"));
 
@@ -39,11 +36,11 @@ public class VersionChecker {
             return;
         }
         catch (MalformedURLException ex) {
-            LOGGER.error("INVALID VERSION API ENDPOINT! Please change endpoint URL in config/createsmp_updatechecker-common.toml", ex);
+            LOGGER.error("INVALID MODPACK VERSION API ENDPOINT! Please change endpoint URL in config/createsmp_updatechecker-common.toml", ex);
         } catch (IOException ex) {
-            LOGGER.error("could not get version info JSON data", ex);
-        } catch (JsonSyntaxException | JsonIOException ex) {
-            LOGGER.error("version info JSON is invalid", ex);
+            LOGGER.error("could not get modpack version info JSON data", ex);
+        } catch (JsonParseException ex) {
+            LOGGER.error("modpack version info JSON is invalid", ex);
         }
 
         // fallback so file is always created
@@ -59,7 +56,7 @@ public class VersionChecker {
         try (FileWriter file = new FileWriter(filePath)) {
             file.write(json);
         } catch (IOException ex) {
-            LOGGER.error("could not write version info JSON to file", ex);
+            LOGGER.error("could not write modpack version info to file", ex);
         }
     }
 }
