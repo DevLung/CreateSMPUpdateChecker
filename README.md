@@ -34,8 +34,8 @@ should respond with a JSON object containing the following data:
 }
 ```
 
-*(<placeholder> = placeholder accepting data explained within;
-one OR two = either one or two is accepted)*
+*(`<placeholder>` = placeholder accepting data explained within;
+`one OR two` = either one or two is accepted)*
 
 You should probably also create a JSON schema to validate your JSON against
 before your API responds with it to circumvent any errors and bugs.
