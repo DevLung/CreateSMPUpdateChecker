@@ -18,7 +18,7 @@ public class VersionChecker {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     public static Map<String, Object> latestVersionInfo;
     public static boolean updateAvailable = false;
-    private static final String latestVersionInfoFilePath = "./latest_version_info.json";
+    private static final String LATEST_VERSION_INFO_FILE_PATH = "./latest_version_info.json";
 
     public static void checkForUpdates() {
         try {
@@ -35,7 +35,7 @@ public class VersionChecker {
             latestVersionInfo.put("changelogFancyMenu", latestVersionInfo.get("changelog").toString().replace("\n", "%n%"));
             latestVersionInfo.put("currentVersion", Config.currentVersion);
             latestVersionInfo.put("updateAvailable", updateAvailable);
-            writeJsonToFile(GSON.toJson(latestVersionInfo), latestVersionInfoFilePath);
+            writeJsonToFile(GSON.toJson(latestVersionInfo), LATEST_VERSION_INFO_FILE_PATH);
             return;
         }
         catch (MalformedURLException ex) {
@@ -47,7 +47,7 @@ public class VersionChecker {
         }
 
         // fallback so file is always created
-        writeJsonToFile(String.format("{\"currentVersion\": \"%s\", \"updateAvailable\": false}", Config.currentVersion), latestVersionInfoFilePath);
+        writeJsonToFile(String.format("{\"currentVersion\": \"%s\", \"updateAvailable\": false}", Config.currentVersion), LATEST_VERSION_INFO_FILE_PATH);
     }
 
     private static Map<String, Object> getJsonFromUrl(URL url) throws IOException, JsonSyntaxException {
