@@ -1,6 +1,6 @@
 # Create-SMP Update Checker
 
-A simple update checker for the Create-SMP modpack.
+A simple update checker originally created for the Create-SMP modpack.
 
 ## Usage
 
