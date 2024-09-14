@@ -29,7 +29,10 @@ public class VersionChecker {
             }
             updateAvailable = !Objects.equals(Config.currentVersion, latestVersionInfo.get("latestVersion"));
 
+            // remove schema to be able to be able to edit json without violating the schema
             latestVersionInfo.remove("$schema");
+            // add changelog with "%n%" as the line break symbol making it compatible with FancyMenu syntax
+            latestVersionInfo.put("changelogFancyMenu", latestVersionInfo.get("changelog").toString().replace("\n", "%n%"));
             latestVersionInfo.put("currentVersion", Config.currentVersion);
             latestVersionInfo.put("updateAvailable", updateAvailable);
             writeJsonToFile(GSON.toJson(latestVersionInfo), latestVersionInfoFilePath);
