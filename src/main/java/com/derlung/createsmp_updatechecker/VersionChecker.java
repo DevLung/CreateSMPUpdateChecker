@@ -6,6 +6,7 @@ import com.mojang.logging.LogUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 
+import javax.naming.ConfigurationException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -22,11 +23,16 @@ public class VersionChecker {
 
     public static void checkForUpdates() {
         try {
+            if (Objects.equals(Config.currentVersion.strip(), "")) {
+                throw new ConfigurationException("currentVersion config field is empty");
+            }
+
             latestVersionInfo = getJsonFromUrl(new URL(Config.versionApiEndpoint));
 
             if (latestVersionInfo.get("latestVersion") == null) {
                 throw new JsonParseException("key \"latestVersion\" does not exist");
             }
+
             updateAvailable = !Objects.equals(Config.currentVersion, latestVersionInfo.get("latestVersion"));
 
             // remove schema to be able to be able to edit json without violating the schema
@@ -35,11 +41,14 @@ public class VersionChecker {
             latestVersionInfo.put("changelogFancyMenu", latestVersionInfo.get("changelog").toString().replace("\n", "%n%"));
             latestVersionInfo.put("currentVersion", Config.currentVersion);
             latestVersionInfo.put("updateAvailable", updateAvailable);
+
             writeJsonToFile(GSON.toJson(latestVersionInfo), LATEST_VERSION_INFO_FILE_PATH);
             return;
         }
-        catch (MalformedURLException ex) {
-            LOGGER.error("INVALID MODPACK VERSION API ENDPOINT! Please change endpoint URL in config/createsmp_updatechecker-common.toml", ex);
+        catch (ConfigurationException ex) {
+            LOGGER.error("CURRENT MODPACK VERSION NOT SPECIFIED! Please set currentVersion in config/createsmp_updatechecker-common.toml", ex);
+        } catch (MalformedURLException ex) {
+            LOGGER.error("INVALID MODPACK VERSION API ENDPOINT! Please change versionApiEndpoint in config/createsmp_updatechecker-common.toml", ex);
         } catch (IOException ex) {
             LOGGER.error("could not get modpack version info JSON data", ex);
         } catch (JsonParseException ex) {
@@ -47,7 +56,10 @@ public class VersionChecker {
         }
 
         // fallback so file is always created
-        writeJsonToFile(String.format("{\"currentVersion\": \"%s\", \"updateAvailable\": false}", Config.currentVersion), LATEST_VERSION_INFO_FILE_PATH);
+        writeJsonToFile(
+                String.format("{\"currentVersion\": \"%s\", \"updateAvailable\": %b}", Config.currentVersion, updateAvailable),
+                LATEST_VERSION_INFO_FILE_PATH
+        );
     }
 
     private static Map<String, Object> getJsonFromUrl(URL url) throws IOException, JsonSyntaxException {
